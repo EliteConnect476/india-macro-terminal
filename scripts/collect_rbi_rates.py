@@ -29,29 +29,44 @@ from utils import save_observation
 
 OUTPUT_FILE = "data/processed/rbi_policy_rates.csv"
 
-# Update these values whenever the RBI MPC announces a change.
-# effective_date = the date the new rate took effect (from the RBI press release)
-CURRENT_RATES = {
-    "REPO_RATE":    {"value": 5.25, "effective_date": "2025-12-05"},
-    "SDF_RATE":     {"value": 5.00, "effective_date": "2025-12-05"},
-    "MSF_RATE":     {"value": 5.50, "effective_date": "2025-12-05"},
-    "BANK_RATE":    {"value": 5.50, "effective_date": "2025-12-05"},
-}
+# Full MPC decision history, verified against RBI/PIB press releases and
+# financial news coverage. Each entry is a real rate change announced at
+# an actual MPC meeting. This gives the dashboard real history to chart
+# instead of a single flat point.
+#
+# TO ADD A NEW RATE CHANGE: add one new entry per indicator at the bottom
+# of RATE_HISTORY with the new value and effective_date, then run this
+# script (or trigger the GitHub Action) once.
+RATE_HISTORY = [
+    # date,          REPO,  SDF,   MSF/Bank
+    ("2023-02-08", 6.50, 6.25, 6.75),   # hiking cycle ends, held here till Feb 2025
+    ("2025-02-07", 6.25, 6.00, 6.50),   # first cut in ~5 years
+    ("2025-04-09", 6.00, 5.75, 6.25),
+    ("2025-06-06", 5.50, 5.25, 5.75),   # 50bp cut, stance -> neutral
+    ("2025-12-05", 5.25, 5.00, 5.50),   # current level (verified June 2026)
+]
 
 
 def run():
-    for indicator, info in CURRENT_RATES.items():
-        saved = save_observation(
-            filepath=OUTPUT_FILE,
-            date=info["effective_date"],
-            indicator=indicator,
-            value=info["value"],
-            unit="percent",
-            release_date=info["effective_date"],
-            source="RBI",
-        )
-        status = "saved new value" if saved else "already up to date"
-        print(f"[{status}] {indicator}: {info['value']}%")
+    for effective_date, repo, sdf, msf_bank in RATE_HISTORY:
+        rates = {
+            "REPO_RATE": repo,
+            "SDF_RATE": sdf,
+            "MSF_RATE": msf_bank,
+            "BANK_RATE": msf_bank,
+        }
+        for indicator, value in rates.items():
+            saved = save_observation(
+                filepath=OUTPUT_FILE,
+                date=effective_date,
+                indicator=indicator,
+                value=value,
+                unit="percent",
+                release_date=effective_date,
+                source="RBI",
+            )
+            status = "saved" if saved else "already up to date"
+            print(f"[{status}] {effective_date} {indicator}: {value}%")
 
 
 if __name__ == "__main__":

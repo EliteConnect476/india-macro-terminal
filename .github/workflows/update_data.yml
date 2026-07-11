@@ -1,4 +1,6 @@
 name: Update Macro Data
+permissions:
+  contents: write
 
 on:
   schedule:

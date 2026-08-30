@@ -235,3 +235,6 @@ date,indicator,value,unit,release_date,revision_number,source,downloaded_at
 2026-08-29,GOLD_USD,4529.9,price,2026-08-29,0,Yahoo Finance,2026-08-29T10:17:42+00:00
 2026-08-29,CRUDE_OIL_USD,83.4,price,2026-08-29,0,Yahoo Finance,2026-08-29T10:17:42+00:00
 2026-08-29,INDIA_VIX,10.68,price,2026-08-29,0,Yahoo Finance,2026-08-29T10:17:42+00:00
+2026-08-30,NIFTY_50,24175.65,price,2026-08-30,0,Yahoo Finance,2026-08-30T09:22:56+00:00
+2026-08-30,USD_INR,95.38,price,2026-08-30,0,Yahoo Finance,2026-08-30T09:22:56+00:00
+2026-08-30,INDIA_VIX,10.68,price,2026-08-30,0,Yahoo Finance,2026-08-30T09:22:56+00:00
